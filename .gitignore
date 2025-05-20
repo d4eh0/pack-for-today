@@ -1,0 +1,18 @@
+# dependencies
+node_modules/
+
+# build
+.next/
+out/
+
+# system
+.DS_Store
+
+# editor
+.idea/
+.vscode/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

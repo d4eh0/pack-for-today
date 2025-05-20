@@ -34,34 +34,40 @@ export default function Home() {
   if (!weather) return <div className="p-8">⏳ 날씨 정보를 불러오는 중...</div>
 
   return (
-    <main className="p-8 space-y-4">
-      <h1
-          className="text-2xl font-bold mb-4"
-          onClick={() => router.push('./Main')}>오늘 뭐챙겨?</h1>
+      <>
+        <main className="p-8 space-y-4">
+          <h1
+              className="text-2xl font-bold mb-4"
+              onClick={() => router.push('./Main')}>오늘 뭐챙겨?</h1>
 
-      <SignalCard
-        title="미세먼지"
-        level={weather.dust > 75 ? 'danger' : weather.dust > 35 ? 'warning' : 'good'}
-        description={`현재 미세먼지 농도: ${weather.dust}`}
-      />
+          <SignalCard
+            title="미세먼지"
+            level={weather.dust > 75 ? 'danger' : weather.dust > 35 ? 'warning' : 'good'}
+            description={`현재 미세먼지 농도: ${weather.dust}`}
+          />
 
-      <SignalCard
-        title="자외선"
-        level={weather.uv > 7 ? 'danger' : weather.uv > 4 ? 'warning' : 'good'}
-        description={`현재 자외선 지수: ${weather.uv}`}
-      />
+          <SignalCard
+            title="자외선"
+            level={weather.uv > 7 ? 'danger' : weather.uv > 4 ? 'warning' : 'good'}
+            description={`현재 자외선 지수: ${weather.uv}`}
+          />
 
-      <SignalCard
-        title="강수확률"
-        level={weather.rain > 60 ? 'danger' : weather.rain > 30 ? 'warning' : 'good'}
-        description={`오늘 강수확률: ${weather.rain}%`}
-      />
+          <SignalCard
+            title="강수확률"
+            level={weather.rain > 60 ? 'danger' : weather.rain > 30 ? 'warning' : 'good'}
+            description={`오늘 강수확률: ${weather.rain}%`}
+          />
 
-      <SignalCard
-        title="일교차"
-        level={weather.tempDiff > 10 ? 'warning' : 'good'}
-        description={`오늘 일교차: ${weather.tempDiff}°C`}
-      />
-    </main>
+          <SignalCard
+            title="일교차"
+            level={weather.tempDiff > 10 ? 'warning' : 'good'}
+            description={`오늘 일교차: ${weather.tempDiff}°C`}
+          />
+        </main>
+          <section>
+              <h1>기상청날씨</h1>
+              <h2>경산시날씨</h2>
+          </section>
+      </>
   );
 }
