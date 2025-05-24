@@ -1,8 +1,17 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
-export default function Home() {
+export default function Home({ weather }) {
     const [openIndex, setOpenIndex] = useState(null); // 0,1,2,3 중 하나 or null
     return (
+        <>
+            <div className="space-y-1">
+                <p>현재: {weather.curTemp}°</p>
+                <p>최고: {weather.maxTemp}°</p>
+                <p>최저: {weather.minTemp}°</p>
+                <p>강수확률: {weather.rain}%</p>
+                <p>자외선: {weather.uv}</p>
+                <p>미세먼지: {weather.dust}</p>
+            </div>
         <div className="min-h-screen bg-cover bg-center flex justify-center items-center px-12"
              style={{ backgroundImage: "url('/background/sunny-bg.jpg')" }}>
 
@@ -27,40 +36,17 @@ export default function Home() {
 
                     {/* 신호등 */}
                     <section>
-                        <div className="flex flex-row gap-6 p-4 rounded-[3rem]"
-                             style={{ backgroundColor: '#42464D' }}>
-                            {/* 우산 */}
-                            <div className="w-24 h-24 rounded-full outline-1 outline-zinc-600 flex items-center justify-center"
-                                 onClick={() => {
-                                     setOpenIndex(openIndex === 0 ? null : 0);
-                                 }}
-                                 style={{ backgroundColor: '#A5DC99' }}>
-                                <img className="w-10 h-10" src="/traffic/umbrella.svg" alt="우산" />
-                            </div>
-                            {/* 선크림 */}
-                            <div className="w-24 h-24 rounded-full outline-1 outline-zinc-600 flex items-center justify-center"
-                                 onClick={() => {
-                                     setOpenIndex(openIndex === 1 ? null : 1);
-                                 }}
-                                 style={{ backgroundColor: '#FF7C6D' }}>
-                                <img className="w-12 h-12" src="/traffic/sunscreen.svg" alt="선크림" />
-                            </div>
-                            {/* 겉옷 */}
-                            <div className="w-24 h-24 rounded-full outline-1 outline-zinc-600 flex items-center justify-center"
-                                 onClick={() => {
-                                     setOpenIndex(openIndex === 2 ? null : 2);
-                                 }}
-                                 style={{ backgroundColor: '#FFCD6A' }}>
-                                <img className="w-16 h-16 mt-2" src="/traffic/temp-gap.svg" alt="겉옷" />
-                            </div>
-                            {/* 마스크 */}
-                            <div className="w-24 h-24 rounded-full outline-1 outline-zinc-600 flex items-center justify-center"
-                                 onClick={() => {
-                                     setOpenIndex(openIndex === 3 ? null : 3);
-                                 }}
-                                 style={{ backgroundColor: '#A5DC99' }}>
-                                <img className="w-16 h-16" src="" alt="마스크" />
-                            </div>
+                        <div className="flex flex-row gap-6 p-4 rounded-[3rem]" style={{ backgroundColor: '#42464D' }}>
+                            {['umbrella', 'sunscreen', 'temp-gap', 'mask'].map((icon, idx) => (
+                                <div
+                                    key={icon}
+                                    className="w-24 h-24 rounded-full outline-1 outline-zinc-600 flex items-center justify-center"
+                                    onClick={() => setOpenIndex(openIndex === idx ? null : idx)}
+                                    style={{ backgroundColor: ['#A5DC99', '#FF7C6D', '#FFCD6A', '#A5DC99'][idx] }}
+                                >
+                                    <img className="w-12 h-12" src={`/traffic/${icon}.svg`} alt={icon} />
+                                </div>
+                            ))}
                         </div>
                     </section>
                 </header>
@@ -83,5 +69,6 @@ export default function Home() {
                 </footer>
             </main>
         </div>
+            </>
     );
 }
