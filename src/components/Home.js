@@ -2,15 +2,17 @@ import { useState } from 'react';
 
 export default function Home({ weather }) {
     const [openIndex, setOpenIndex] = useState(null); // 0,1,2,3 중 하나 or null
+// Home 컴포넌트 안
+    if (!weather) return null; // 또는 fallback UI
     return (
         <>
             <div className="space-y-1">
-                <p>현재: {weather.curTemp}°</p>
-                <p>최고: {weather.maxTemp}°</p>
-                <p>최저: {weather.minTemp}°</p>
-                <p>강수확률: {weather.rain}%</p>
-                <p>자외선: {weather.uv}</p>
-                <p>미세먼지: {weather.dust}</p>
+                <p>현재: {weather.curTemp ?? "-"}°</p>
+                <p>최고: {weather.maxTemp ?? "-"}°</p>
+                <p>최저: {weather.minTemp ?? "-"}°</p>
+                <p>강수확률: {weather.rain ?? "-"}%</p>
+                <p>자외선: {weather.uv ?? "-"}</p>
+                <p>미세먼지: {weather.dust ?? "-"}</p>
             </div>
 
 

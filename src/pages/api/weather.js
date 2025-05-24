@@ -3,9 +3,9 @@ export default async function handler(req, res) {
 
     const key = process.env.WEATHER_API_KEY;
     const url =
-        `https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtFcst?` +
+        `https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?` +
         `serviceKey=${key}&base_date=${base_date}&base_time=${base_time}` +
-        `&nx=${nx}&ny=${ny}&dataType=JSON`;
+        `&nx=${nx}&ny=${ny}&dataType=JSON&numOfRows=500`;
 
     try {
         const response = await fetch(url);

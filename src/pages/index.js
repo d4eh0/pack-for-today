@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Home from "@/components/Home";
 
 export default function IndexPage() {
+
     const [weather, setWeather] = useState(null);
     const [error, setError] = useState(null);
     const dummyWeather = {
@@ -13,15 +14,8 @@ export default function IndexPage() {
         dust: 45,
     };
 
-    useEffect(() => {
-        async function fetchWeather() {
-            const res = await fetch('/api/weather?nx=55&ny=127&base_date=20250524&base_time=0500');
-            const data = await res.json();
-            console.log(data);
-        }
-        fetchWeather();
-    }, []);
-
+    {/*
+    // 위치 정보 조회
     useEffect(() => {
         navigator.geolocation.getCurrentPosition(
             async (pos) => {
@@ -35,9 +29,39 @@ export default function IndexPage() {
             }
         );
     }, []);
+*/}
+    // 날씨 받아오기
+    /***************************************************
+     * <API 응답구조>
+     * data.response.body.items.item = [
+     *   { category: "POP", fcstValue: "30", ... },
+     *   { category: "TMX", fcstValue: "26", ... },
+     *   { category: "TMN", fcstValue: "14", ... },
+     *   ... ]
+     ***************************************************/
+    useEffect(() => {
+        async function getWeather() {
+            const res = await fetch('/api/weather?nx=55&ny=127&base_date=20250524&base_time=0200');
+            const data = await res.json();
 
-    if (error) return <div className="p-8 text-red-500">{error}</div>;
-    if (!weather) return <div className="p-8">로딩 중...</div>;
+            console.log("✅ 응답 확인", data);
+            const items = data.response.body.items.item;
+            const extracted = {
+                curTemp: items.find((e) => e.category === "TMP")?.fcstValue, // 현재기온
+                rain: items.find((e) => e.category === "POP")?.fcstValue,   // 강수확률
+                maxTemp: items.find((e) => e.category === "TMX")?.fcstValue, // 최고기온
+                minTemp: items.find((e) => e.category === "TMN")?.fcstValue, // 최저기온
+                uv: "-",
+                dust: "-",
+            };
 
-    return <Home weather={dummyWeather} />;
+            setWeather(extracted);
+        }
+        getWeather();
+    }, []);
+
+    // if (error) return <div className="p-8 text-red-500">{error}</div>;
+    // if (!weather) return <div className="p-8">로딩 중...</div>;
+
+    return <Home weather={weather} />;
 }
