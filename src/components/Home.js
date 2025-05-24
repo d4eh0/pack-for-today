@@ -32,6 +32,13 @@ export default function Home({ weather }) {
     };
     const { icon, label } = getWeatherIcon();
 
+    function formatDateLabel(date, time) {
+        const month = date.slice(4, 6);
+        const day = date.slice(6, 8);
+        const hour = time.slice(0, 2);
+        return `${month}/${day} ${hour}:00`;
+    }
+
     // 상세정보 더미데이터
     const rainDetailData = {
         rainTimeRange: "15시 ~ 18시",
@@ -71,7 +78,8 @@ export default function Home({ weather }) {
             <div className="absolute inset-0 bg-white/20 z-0" />
 
             <main className="relative z-10 w-full max-w-5xl bg-white rounded-3xl shadow-xl">
-                <header className=" px-12 pt-12 flex justify-between">
+                <p className="text-right text-xs px-6 py-4 text-neutral-400"> {formatDateLabel(weather.baseDate, weather.baseTime)}</p>
+                <header className="px-12 py-6 flex justify-between">
                     {/* 날씨 요약 */}
                     <section className="flex flex-col gap-3">
                         <h2 className="text-2xl font-semibold text-zinc-700">경산시</h2>
