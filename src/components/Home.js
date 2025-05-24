@@ -1,9 +1,37 @@
 import { useState } from 'react';
 
 export default function Home({ weather }) {
+    if (!weather) return null; // weather 로딩되기 전에 렌더링 방지
     const [openIndex, setOpenIndex] = useState(null); // 0,1,2,3 중 하나 or null
-// Home 컴포넌트 안
-    if (!weather) return null; // 또는 fallback UI
+
+    // SKY 및 PTY로 날씨상태 파싱
+    const getWeatherIcon = () => {
+        const sky = weather.sky;
+        const pty = weather.pty;
+
+        if (pty !== "0") {
+            switch (pty) {
+                case "1": return { icon: "rain", label: "비" };
+                case "2": return { icon: "rain", label: "비/눈" };
+                case "3": return { icon: "snow", label: "눈" };
+                case "4": return { icon: "rain", label: "소나기" };
+                case "5": return { icon: "rain", label: "빗방울" };
+                case "6": return { icon: "rain", label: "빗방울/눈날림" };
+                case "7": return { icon: "snow", label: "눈날림" };
+                default: return { icon: "undefined", label: "불명확" };
+            }
+        } else {
+            switch (sky) {
+                case "1": return { icon: "sunny", label: "맑음" };
+                case "3": return { icon: "partly-cloudy", label: "구름 많음" };
+                case "4": return { icon: "cloudy", label: "흐림" };
+                default: return { icon: "undefined", label: "불명확" };
+            }
+        }
+    };
+    const { icon, label } = getWeatherIcon();
+
+
     return (
         <>
             <div className="space-y-1">
@@ -28,13 +56,15 @@ export default function Home({ weather }) {
                     <section className="flex flex-col gap-3">
                         <h2 className="text-2xl font-semibold text-zinc-700">경산시</h2>
                         <div className="flex font-extralight text-zinc-800">
-                            <img className="w-16 h-16 mr-2" src="/weather/sunny-icon.svg"/>
-                            <span className="text-6xl">19</span>
+                            <img className="w-16 h-16 mr-2" src={`/weather/${icon}.svg`} />
+                            <span className="text-6xl">{parseInt(weather.curTemp)}</span>
                             <span className="text-5xl">°</span>
                         </div>
                         <div className="flex flex-col gap-1">
-                            <span className="text-xl text-neutral-500 font-bold">맑음</span>
-                            <span className="text-md text-neutral-400 font-bold">최고: 24° / 최저: 16°</span>
+                            <span className="text-xl text-neutral-500 font-bold">{label}</span>
+                            <span className="text-md text-neutral-400 font-bold">
+      최고: {parseInt(weather.maxTemp)}° / 최저: {parseInt(weather.minTemp)}°
+    </span>
                         </div>
                     </section>
 
