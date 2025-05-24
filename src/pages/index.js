@@ -14,6 +14,15 @@ export default function IndexPage() {
     };
 
     useEffect(() => {
+        async function fetchWeather() {
+            const res = await fetch('/api/weather?nx=55&ny=127&base_date=20250524&base_time=0500');
+            const data = await res.json();
+            console.log(data);
+        }
+        fetchWeather();
+    }, []);
+
+    useEffect(() => {
         navigator.geolocation.getCurrentPosition(
             async (pos) => {
                 const { latitude, longitude } = pos.coords;

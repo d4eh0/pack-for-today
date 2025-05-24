@@ -12,6 +12,8 @@ export default function Home({ weather }) {
                 <p>자외선: {weather.uv}</p>
                 <p>미세먼지: {weather.dust}</p>
             </div>
+
+
         <div className="min-h-screen bg-cover bg-center flex justify-center items-center px-12"
              style={{ backgroundImage: "url('/background/sunny-bg.jpg')" }}>
 
