@@ -34,6 +34,7 @@ export default function Home({ weather }) {
 
     return (
         <>
+            {/*
             <div className="space-y-1">
                 <p>현재: {weather.curTemp ?? "-"}°</p>
                 <p>최고: {weather.maxTemp ?? "-"}°</p>
@@ -41,11 +42,11 @@ export default function Home({ weather }) {
                 <p>강수확률: {weather.rain ?? "-"}%</p>
                 <p>자외선: {weather.uv ?? "-"}</p>
                 <p>미세먼지: {weather.dust ?? "-"}</p>
-            </div>
+            </div> */}
 
 
         <div className="min-h-screen bg-cover bg-center flex justify-center items-center px-12"
-             style={{ backgroundImage: "url('/background/sunny-bg.jpg')" }}>
+             style={{ backgroundImage: `url('/background/${icon}-bg.jpg')` }}>
 
             {/* 오버레이 */}
             <div className="absolute inset-0 bg-white/20 z-0" />
