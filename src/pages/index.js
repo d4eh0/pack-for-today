@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import Home from "@/components/Home";
 import { getBaseDateTime } from "@/utils/timeConverter.js";
+import { parseRainAmount, getRainTimeRange } from "@/utils/rainUtils.js";
 
-export default function IndexPage() {
+export default function Index() {
 
     const [weather, setWeather] = useState(null);
     const [error, setError] = useState(null);
@@ -25,14 +26,6 @@ export default function IndexPage() {
     }, []);
 */}
     // 날씨 받아오기
-    /***************************************************
-     * <API 응답구조>
-     * data.response.body.items.item = [
-     *   { category: "POP", fcstValue: "30", ... },
-     *   { category: "TMX", fcstValue: "26", ... },
-     *   { category: "TMN", fcstValue: "14", ... },
-     *   ... ]
-     ***************************************************/
     useEffect(() => {
         async function getWeather() {
             const { baseDate, baseTime } = getBaseDateTime();
@@ -40,8 +33,8 @@ export default function IndexPage() {
             try {
                 const res = await fetch(`/api/weather?nx=55&ny=127&base_date=${baseDate}&base_time=${baseTime}`);
                 const data = await res.json();
-
                 const items = data.response.body.items.item;
+
                 const extracted = {
                     curTemp: items.find((e) => e.category === "TMP")?.fcstValue,
                     rain: items.find((e) => e.category === "POP")?.fcstValue,
@@ -53,6 +46,10 @@ export default function IndexPage() {
                     dust: "-",
                     baseDate,
                     baseTime,
+                    rainTimeRange: getRainTimeRange(items),
+                    rainAmount: parseRainAmount(
+                        items.find((e) => e.category === "PCP")?.fcstValue ?? "-"
+                    ),
                 };
 
                 setWeather(extracted);

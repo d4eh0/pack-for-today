@@ -41,9 +41,9 @@ export default function Home({ weather }) {
 
     // 상세정보 더미데이터
     const rainDetailData = {
-        rainTimeRange: "15시 ~ 18시",
+        rainTimeRange: weather.rainTimeRange,
         rainChance: weather.rain,
-        rainAmount: "1.5",
+        rainAmount: weather.rainAmount,
     };
 
     const uvDetailData = {
