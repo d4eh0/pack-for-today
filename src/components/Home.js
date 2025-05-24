@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import DetailPanel from "@/components/DetailPanel";
 
 export default function Home({ weather }) {
     if (!weather) return null; // weather 로딩되기 전에 렌더링 방지
@@ -31,6 +32,24 @@ export default function Home({ weather }) {
     };
     const { icon, label } = getWeatherIcon();
 
+    // 상세정보 더미데이터
+    const rainDetailData = {
+        rainTimeRange: "15시 ~ 18시",
+        rainChance: weather.rain,
+        rainAmount: "1.5",
+    };
+
+    const uvDetailData = {
+        uvIndex: weather.uv ?? 6,
+    };
+
+    const tempGapDetailData = {
+        tempGap: Math.abs(weather.maxTemp - weather.minTemp) ?? 12,
+    };
+
+    const dustDetailData = {
+        dustLevel: weather.dust ?? 45,
+    };
 
     return (
         <>
@@ -52,19 +71,19 @@ export default function Home({ weather }) {
             <div className="absolute inset-0 bg-white/20 z-0" />
 
             <main className="relative z-10 w-full max-w-5xl bg-white rounded-3xl shadow-xl">
-                <header className=" p-8 flex justify-between">
+                <header className=" px-12 pt-12 flex justify-between">
                     {/* 날씨 요약 */}
                     <section className="flex flex-col gap-3">
                         <h2 className="text-2xl font-semibold text-zinc-700">경산시</h2>
-                        <div className="flex font-extralight text-zinc-800">
+                        <div className="flex gap-2 font-extralight text-zinc-800">
                             <img className="w-16 h-16 mr-2" src={`/weather/${icon}.svg`} />
-                            <span className="text-6xl">{parseInt(weather.curTemp)}</span>
+                            <span className="text-6xl">{Math.round(weather.curTemp)}</span>
                             <span className="text-5xl">°</span>
                         </div>
                         <div className="flex flex-col gap-1">
                             <span className="text-xl text-neutral-500 font-bold">{label}</span>
                             <span className="text-md text-neutral-400 font-bold">
-      최고: {parseInt(weather.maxTemp)}° / 최저: {parseInt(weather.minTemp)}°
+      최고: {Math.round(weather.maxTemp)}° / 최저: {Math.round(weather.minTemp)}°
     </span>
                         </div>
                     </section>
@@ -87,14 +106,14 @@ export default function Home({ weather }) {
                 </header>
                 {/* 상세정보 */}
                 <section
-                    className={`transition-all duration-500 overflow-hidden ${
+                    className={`transition-all duration-1200 overflow-hidden ${
                         openIndex !== null ? "max-h-[300px] py-10 px-6" : "max-h-0 py-0 px-6"
                     }`}
                 >
-                    {openIndex === 0 && <p>강수량 정보</p>}
-                    {openIndex === 1 && <p>자외선 정보</p>}
-                    {openIndex === 2 && <p>일교차 정보</p>}
-                    {openIndex === 3 && <p>미세먼지 정보</p>}
+                    {openIndex === 0 && <DetailPanel type="rain" data={rainDetailData} />}
+                    {openIndex === 1 && <DetailPanel type="uv" data={uvDetailData} />}
+                    {openIndex === 2 && <DetailPanel type="temp-gap" data={tempGapDetailData} />}
+                    {openIndex === 3 && <DetailPanel type="dust" data={dustDetailData} />}
                 </section>
                 <footer className="flex justify-end p-4">
                     <div className="flex flex-col items-end gap-1 text-sm text-neutral-500">
