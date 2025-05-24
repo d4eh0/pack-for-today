@@ -5,15 +5,40 @@ export default function IndexPage() {
 
     const [weather, setWeather] = useState(null);
     const [error, setError] = useState(null);
-    const dummyWeather = {
-        curTemp: 55,
-        maxTemp: 99,
-        minTemp: 11,
-        rain: 30,
-        uv: 6,
-        dust: 45,
-    };
 
+    // base_date, base_time 자동 계산 함수
+    function getBaseDateTime() {
+        const now = new Date();
+        const hour = now.getHours();
+        const minute = now.getMinutes();
+
+        const base = [
+            { h: 2, m: 10, v: '0200' },
+            { h: 5, m: 10, v: '0500' },
+            { h: 8, m: 10, v: '0800' },
+            { h: 11, m: 10, v: '1100' },
+            { h: 14, m: 10, v: '1400' },
+            { h: 17, m: 10, v: '1700' },
+            { h: 20, m: 10, v: '2000' },
+            { h: 23, m: 10, v: '2300' },
+        ];
+
+        let baseTime = '0200';
+        for (let i = base.length - 1; i >= 0; i--) {
+            const { h, m, v } = base[i];
+            if (hour > h || (hour === h && minute >= m)) {
+                baseTime = v;
+                break;
+            }
+        }
+
+        const yyyy = now.getFullYear();
+        const mm = String(now.getMonth() + 1).padStart(2, '0');
+        const dd = String(now.getDate()).padStart(2, '0');
+        const baseDate = `${yyyy}${mm}${dd}`;
+
+        return { baseDate, baseTime };
+    }
     {/*
     // 위치 정보 조회
     useEffect(() => {
@@ -41,23 +66,31 @@ export default function IndexPage() {
      ***************************************************/
     useEffect(() => {
         async function getWeather() {
-            const res = await fetch('/api/weather?nx=55&ny=127&base_date=20250524&base_time=0200');
-            const data = await res.json();
+            const { baseDate, baseTime } = getBaseDateTime();
 
-            const items = data.response.body.items.item;
-            const extracted = {
-                curTemp: items.find((e) => e.category === "TMP")?.fcstValue, // 현재기온
-                rain: items.find((e) => e.category === "POP")?.fcstValue,   // 강수확률
-                maxTemp: items.find((e) => e.category === "TMX")?.fcstValue, // 최고기온
-                minTemp: items.find((e) => e.category === "TMN")?.fcstValue, // 최저기온
-                sky: items.find((e) => e.category === "SKY")?.fcstValue, // 하늘상태
-                pty: items.find((e) => e.category === "PTY")?.fcstValue, // 강수형태
-                uv: "-",
-                dust: "-",
-            };
+            try {
+                const res = await fetch(`/api/weather?nx=55&ny=127&base_date=${baseDate}&base_time=${baseTime}`);
+                const data = await res.json();
 
-            setWeather(extracted);
+                const items = data.response.body.items.item;
+                const extracted = {
+                    curTemp: items.find((e) => e.category === "TMP")?.fcstValue,
+                    rain: items.find((e) => e.category === "POP")?.fcstValue,
+                    maxTemp: items.find((e) => e.category === "TMX")?.fcstValue,
+                    minTemp: items.find((e) => e.category === "TMN")?.fcstValue,
+                    sky: items.find((e) => e.category === "SKY")?.fcstValue,
+                    pty: items.find((e) => e.category === "PTY")?.fcstValue,
+                    uv: "-",
+                    dust: "-",
+                };
+
+                setWeather(extracted);
+            } catch (err) {
+                console.error("❌ 날씨 API 요청 실패", err);
+                setError("날씨 데이터를 불러오지 못했어요.");
+            }
         }
+
         getWeather();
     }, []);
 
