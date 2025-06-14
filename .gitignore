@@ -18,7 +18,8 @@ yarn-debug.log*
 yarn-error.log*
 
 # environment variables
-.env
-.env.local
-.env.development
-.env.production
+# API 인증키라 github 업로드 시 개인정보 유출 위험이 있으나 과제 제출로 인해 그냥 업로드
+# .env
+# .env.local
+# .env.development
+# .env.production

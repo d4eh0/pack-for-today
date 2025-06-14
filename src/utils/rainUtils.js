@@ -4,8 +4,8 @@ export function parseRainAmount(value) {
     const num = parseFloat(value);
     if (isNaN(num)) return "정보 없음";
     if (num < 1.0) return "1mm 미만";
-    if (num >= 1.0 && num < 30.0) return `${num.toFixed(1)} mm`;
-    if (num >= 30.0 && num < 50.0) return "30.0~50.0mm";
+    if (num >= 1.0 && num < 30.0) return "10~30mm";
+    if (num >= 30.0 && num < 50.0) return "30~50mm";
     return "50.0mm 이상";
 }
 
