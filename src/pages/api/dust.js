@@ -9,6 +9,10 @@ export default async function handler(req, res) {
     const key = process.env.DUST_API_KEY;
     const sidoName = sidoMap[sido];
 
+    // ✅ 콘솔 출력 추가
+    console.log("📌 요청된 시도:", sido);
+    console.log("✅ 변환된 sidoName:", sidoName);
+
     if (!sidoName) {
         return res.status(400).json({ error: "지원하지 않는 시도명입니다." });
     }
@@ -16,6 +20,7 @@ export default async function handler(req, res) {
     const url = `https://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty?` +
         `serviceKey=${key}&returnType=json&sidoName=${encodeURIComponent(sidoName)}&ver=1.0`;
 
+    console.log("📡 최종 요청 URL:", url); // 이 줄 추가
     try {
         const response = await fetch(url);
         const data = await response.json();

@@ -1,7 +1,9 @@
 export function parseDustData(items) {
     if (!items || items.length === 0) return null;
 
-    const item = items[0];
+    // 유효한 pm10Grade를 가진 첫 번째 item 찾기
+    const item = items.find(i => i.pm10Grade && i.pm10Grade !== "-");
+    if (!item) return null;
 
     return {
         stationName: item.stationName || null,
